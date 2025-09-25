@@ -1,6 +1,7 @@
 // Vercel Serverless Function
 module.exports = async (req, res) => {
-  const ALLOW_ORIGIN = 'https://maple.inc'; // add staging domain while testing
+  const ALLOW_ORIGIN = 'https://maple.inc'; // adjust for staging if needed
+  const DUB_API_KEY = process.env.DUB_API_KEY; // set this in Vercel env vars
 
   // CORS preflight
   if (req.method === 'OPTIONS') {
@@ -18,7 +19,10 @@ module.exports = async (req, res) => {
   try {
     const r = await fetch('https://api.dub.co/track/lead', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${DUB_API_KEY}` // 🔑 required
+      },
       body: JSON.stringify(req.body || {}),
     });
 
